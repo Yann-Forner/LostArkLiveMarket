@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Lost Ark Market</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="/static/js/canvasjs.min.js" ></script>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <script src="/static/js/moment.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+</head>
+<body style="background: #121212">
+
+    <nav class="navbar navbar-expand-lg navbar-light justify-content-center" style="background: #202020">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link text-white" aria-current="page" style="font-weight: bold;font-size: 2.5em" href="">Lost Ark Market</a>
+            </li>
+        </ul>
+        <ul class="nav justify-content-end">
+            <li class="nav-item" style="color: white">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" style="padding-left: 0.3em;padding-right: 0.3em;padding-top: 0;padding-bottom: 0">
+                    <img src="/static/img/info-lg.svg" >
+                </button>
+            </li>
+        </ul>
+    </nav>
+    <div class="" style="margin-left: 45%;"><input id="search" style="width: 15% !important;margin: 1%;background: #202020;color: white " type="text" class="form-control" placeholder="Search"></div>
+    <div class="container-fluid row " style="margin: 0">
+        <div class="col-2 col-xs-12">
+            <div class="" style="border-radius: 7px;background:#202020;margin: 10px;">
+                {% for item in cat %}
+                <div class="row myBtn " style="font-size: 1.8em;margin-left: 10px;margin-right: 10px">
+                    <a class="btn btnCat" onclick='send("{{item}}")' style="color: white;border-bottom: 1px solid black;padding: 0"><p>{{item}}</p></a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-9 col-xs-12 stats" style="background: #202020; margin: 10px;border-radius: 7px;">
+            <div style="margin: 0 auto;font-weight: bold; color: white">When you click on a Pin button,the related item will appear here</div>
+            <img style="margin: 0;position: absolute;top: 25%;left: 45%;" width="200em" src="/static/img/mokoko.gif"  alt="Mokoko">
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="color: white">
+            <div class="modal-content" style="background-color: rgba(0,0,0,1) ">
+                <div class="modal-header" style="background: #121212;border-bottom: 0">
+                    <h5 class="modal-title"  id="exampleModalLabel">Infos</h5>
+                </div>
+                <div class="modal-body" style="background: #202020;">
+                    <p>This app has been created from this <a href="https://documenter.getpostman.com/view/20821530/UyxbppKr">api</a>, I guess he's scraping the infos from an in-game bot.<br>
+                    As a result, the refresh is a bit slow, about 6 to 10 hours. But, it stays a good way to study the market.</p>
+                    <p>To contact me : <img ALT="HadS" width="100em" src="/static/img/avatar.PNG"></p>
+                    <p>If you have any suggestions about using a better api or something else don't hesitate.</p>
+                </div>
+                <div class="modal-footer" style="background: #121212;border-top: 0;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+    <script>
+
+    function pinit(id){
+        localStorage[id] = "";
+    }
+
+    function unpinit(id,button){
+        delete localStorage[id]
+        button.parentNode.parentNode.remove()
+    }
+    function generateLine(data,pin=false){
+        let rarityColor;
+        switch (data.rarity) {
+            case 1:
+                rarityColor = "green"
+                break;
+            case  2:
+                rarityColor = "blue";
+                break;
+            case 3:
+                rarityColor = "purple";
+                break;
+            case 4:
+                rarityColor = "yellow";
+                break;
+            case 5:
+                rarityColor = "orange";
+                break;
+            default:
+                rarityColor = "white";
+                break;
+        }
+        let myPin = "                <div class='col-1 pin' ><a onclick='pinit(\""+ data.id+"\")' style='margin-top: 20%' class=' btn btn-success btnPin'><img src=\"/static/img/pin.svg\" ></a></div> "
+        if (pin){
+            myPin = "                <div class='col-1 pin' ><a onclick='unpinit(\""+ data.id+"\",this)' style='margin-top: 20%' class=' btn btn-success btnPin'><img src=\"/static/img/x-lg.svg\" ></a></div> "
+        }
+        $(".stats").append("<div data-name='"+ data.name.toLowerCase() +"' class=\"row\" style='margin-top: 10px;border-bottom: 1px solid black; '>\n" +
+            "                <div  class=\"col-1\">\n" +
+            "                <img width=\"50em\" src=\" "+ data.image  +"\">\n" +
+            "               </div >\n" +
+            "               <p class=\"col-2\" style=\"position: relative;margin: 0;color: "+ rarityColor + "; top:50%\"> "+ data.name +"</p>\n" +
+            "               <div class='col-5' id=\""+data.id +"\" style=\"height:100px; \"></div> "+
+            "               <p class='col-1' style=\"position: relative;font-weight: bold;color: #BB86FC; margin:auto\">"+ data.lowPrice +"g&nbsp*&nbsp"+data.cheapestRemaining +"</p>"+
+            myPin +
+            "               <div class='col-1' ><button onclick='modalDetails(\""+data.id +"\")' style='margin-top: 20%' class=' btn btn-success'><img src='/static/img/receipt-cutoff.svg'></button></div>"+
+            "               <div  id=\""+data.id +"-modal\" style='color: white;height: 18em;padding-top: 20px'><div style='width: 100% !important;height: 100%!important;' id='"+data.id +"-chart'></div></div>"+
+            "        </div>");
+        $('#'+data.id+"-modal").hide();
+        let historic = [];
+        $("#search").val("");
+        for (const historicKey in data.shortHistoric) {
+            historic.push({label : historicKey , y: data.shortHistoric[historicKey] })
+        }
+        historic.sort(function(a,b){
+            return new Date(a.label) - new Date(b.label) ;
+        });
+
+        let chart = new CanvasJS.Chart(data.id, {
+            theme: "dark2", // "light2", "dark1", "dark2"
+            animationEnabled: true, // change to true
+            title:{
+                text: "Price variation"
+            },
+            data: [
+                {
+                    // Change type to "bar", "area", "spline", "pie",etc.
+                    type: "stackedArea",
+                    dataPoints: historic
+                }
+            ]
+        });
+        chart.render();
+    }
+
+    function send(cat){
+        $.get( "/send/"+cat, function( data ) {
+            data = JSON.parse(data);
+            console.log(data);
+            $(".stats").empty();
+            for (let i = 0; i < Object.keys(data).length; i++) {
+               generateLine(data[i])
+            }
+        });
+    }
+    function modalDetails(id){
+        $.get( "/history/"+id, function( data ) {
+            data = JSON.parse(data);
+            console.log(data);
+            data[1][0].sort(function(a,b){
+                return new Date(a.timestamp) - new Date(b.timestamp) ;
+            });
+            for (let i = 0; i < data[1][0].length; i++) {
+                data[1][0][i].label = moment(data[1][0][i].timestamp).format("YYYY-MM-DD");
+                data[1][0][i].y = data[1][0][i].low;
+            }
+            let chart = new CanvasJS.Chart(id+"-chart", {
+                theme: "dark2", // "light2", "dark1", "dark2"
+                animationEnabled: true, // change to true
+                title:{
+                    text: "Historic of the price"
+                },
+                data: [
+                    {
+                        // Change type to "bar", "area", "spline", "pie",etc.
+                        type: "stackedArea",
+                        dataPoints:  data[1][0]
+                    }
+                ]
+            });
+            $('.titleDetails').text(data[0][0].name);
+            $('#'+id+'-modal').toggle();
+            chart.render();
+        });
+    }
+
+    function search(content){
+        let divs = $(".stats > div");
+        for (let i = 0; i < divs.length; i++) {
+            let item = divs[i];
+            if (item.dataset["name"].includes(content)){
+                item.style.display= "flex";
+            }else{
+                item.style.display= "none";
+
+            }
+        }
+    }
+    $( document ).ready(function() {
+        myUrls = ""
+        if(Object.keys(localStorage).length !==0)$(".stats").empty();
+        for (const key in Object.keys(localStorage)) {
+            myUrls += Object.keys(localStorage)[key] +","
+        }
+        myUrls = myUrls.slice(0, -1);
+        $.get( "/sendId/"+myUrls, function( data ) {
+            data = JSON.parse(data);
+            for (const key in data) {
+                generateLine(data[key],true);
+            }
+        });
+        $("#search").on('input', function() {
+            search($(this).val().toLowerCase())
+        });
+    });
+
+</script>
+</body>
+</html>

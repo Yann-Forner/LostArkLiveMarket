@@ -1,0 +1,13 @@
+.myBtn:hover{
+    font-weight: bold;
+    color: #202020;
+    background: #BB86FC;
+}
+
+#chartDetails{
+    width: 100%;
+}
+.center {
+    display: inline;
+    margin: auto;
+}
