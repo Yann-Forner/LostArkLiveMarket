@@ -1,4 +1,3 @@
-import requests
 import json
 from flask import Flask, render_template
 from Model import Market as M
