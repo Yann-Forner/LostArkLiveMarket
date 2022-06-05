@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.py",
+      "use": "@yann-forner/lost-ark-live-market"
+    }
+  ],
+  "routes": [
+    {
+      "src": "(.*)",
+      "dest": "app.py"
+    }
+  ]
+}
