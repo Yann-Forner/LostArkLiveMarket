@@ -29,4 +29,6 @@ def getHistoryId(id):
     return json.dumps([M.getById(region,id),M.getMarketHistoryById(region,id)])
 
 
-app.run(host='0.0.0.0', port=81)
+if __name__=='__main__':
+    app.debug=True
+    app.run('0.0.0.0', port=5001) #port can be anything higher than 5000.
